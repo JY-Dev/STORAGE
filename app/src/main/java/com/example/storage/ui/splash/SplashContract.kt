@@ -7,11 +7,10 @@ import io.reactivex.disposables.CompositeDisposable
 
 interface SplashContract {
     interface View{
-        fun getCompositeDisposable() : CompositeDisposable
     }
 
     interface  Presenter{
-        fun imageDataCheck(imageUri : String , date : Long)
-
+        //fun imageDataCheck(imageUri : String , date : Long)
+        suspend fun dataCheck(imageUri: String, date: Long)
     }
 }

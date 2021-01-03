@@ -9,12 +9,15 @@ import com.example.storage.R
 import com.example.storage.databinding.ItemStoryBinding
 import com.example.storage.model.ImageData
 
-class StoryAdapter : RecyclerView.Adapter<StoryAdapter.ViewHolder>() {
+class StoryAdapter(val gotoImageDetail:(imageUri : String) -> Unit) : RecyclerView.Adapter<StoryAdapter.ViewHolder>() {
     var storyList = mutableListOf<ImageData>()
     inner class ViewHolder(private val binding: ItemStoryBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item : ImageData){
             binding.apply {
                 imgUrl = item.imageUri
+                root.setOnClickListener {
+                    gotoImageDetail(item.imageUri)
+                }
             }
         }
     }

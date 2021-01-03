@@ -1,6 +1,8 @@
 package com.example.storage.ui.splash
 
+import android.util.Log
 import com.example.storage.base.BasePresenter
+import com.example.storage.model.ImageData
 import com.example.storage.model.TagData
 import kotlinx.coroutines.*
 import kotlin.random.Random
@@ -14,82 +16,43 @@ class SplashPresenter(val mView: SplashContract.View) : SplashContract.Presenter
         mutableListOf("me", "test", "seoul")
     )
 
-    /*    suspend fun test(imageUri: String){
-            tagMock[Random.nextInt(tagMock.size)].apply{
-                println("insert url$imageUri")
-                //imageRepository.insert(ImageData(imageUri, false, this, date))
-                forEach {
-                    println("tag="+it)
-                    updateTagCount(it)
+    override suspend fun dataCheck(imageUri: String, date: Long) {
+        withContext(Dispatchers.IO) {
+            if(imageRepository.getDataFromKey(imageUri)==null){
+                getTags().apply {
+                    updateTagCount(this)
+                    insertImage(imageUri,date,this)
                 }
             }
-        }*/
-    suspend fun test(imageUri: String) {
-        tagMock[Random.nextInt(tagMock.size)].apply {
-            updateTagCount(this)
         }
     }
+
+    /**
+     * 통신으로 받아오기
+     */
+    private suspend fun getTags() : MutableList<String> = tagMock[Random.nextInt(tagMock.size)]
 
     private suspend fun updateTagCount(tags: MutableList<String>) {
         tags.forEach { tag ->
-            if (tagRepository.getDataFromKey(tag as String) == null) insertTagdata(tag)
-            tagRepository.getDataFromKey(tag as String)?.run {
+            if (tagRepository.getDataFromKey(tag) == null) insertTag(tag)
+            tagRepository.getDataFromKey(tag)?.run {
                 count += 1
                 println("tag=$tag count=$count")
-                updateTagData(this)
+                updateTag(this)
             }
         }
     }
 
-    override fun imageDataCheck(imageUri: String, date: Long) {
-        CoroutineScope(Dispatchers.IO).launch {
-            tagMock[Random.nextInt(tagMock.size)].apply {
-                updateTagCount(this)
-            }
-        }
-        /*runBackground {
-            tagMock[Random.nextInt(tagMock.size)].apply{
-                println("insert url$imageUri")
-                //imageRepository.insert(ImageData(imageUri, false, this, date))
-                forEach {
-                    println("tag="+it)
-                    updateTagCount(it)
-                }
-            }
-        }*/
-        /*  val observable = io.reactivex.Flowable.just(imageUri)
-              .subscribeOn(Schedulers.io())
-              .observeOn(Schedulers.newThread())
-              .subscribe { uri ->
-                  if (imageRepository.getData().none { it.imageUri == uri }){
-                      val tags = tagMock[Random.nextInt(tagMock.size)].apply {
-                          val observable = io.reactivex.Flowable.fromIterable(this)
-                              .subscribeOn(Schedulers.io())
-                              .observeOn(Schedulers.newThread())
-                              .doOnComplete {
-                                  println("insert url$uri")
-                                  imageRepository.insert(ImageData(uri, false, this, date))
-                              }
-                              .subscribe {
-                                  println("tag="+it)
-                                  updateTagCount(it)
-                              }
-                      }
-                  } else {
-                      println("remain data=$imageUri")
-                  }
-              }*/
-
+    private suspend fun insertImage(imageUri: String, date: Long, tags: MutableList<String>) {
+        imageRepository.insert(ImageData(imageUri, false, tags, date))
     }
 
 
-
-
-    private suspend fun insertTagdata(tag: String) {
+    private suspend fun insertTag(tag: String) {
         tagRepository.insert(TagData(tag, 1, false))
     }
 
 
-    private suspend fun updateTagData(data: TagData) =
+    private suspend fun updateTag(data: TagData) =
         tagRepository.update(data)
 }

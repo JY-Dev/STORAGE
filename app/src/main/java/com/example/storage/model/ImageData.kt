@@ -6,5 +6,5 @@ import androidx.room.PrimaryKey
 @Entity
 data class ImageData(@PrimaryKey val imageUri: String,
                      val story : Boolean,
-                     val tags : String,
+                     val tags : MutableList<String>,
                      val date : Long) : ModelData
