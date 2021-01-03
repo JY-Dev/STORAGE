@@ -25,10 +25,9 @@ class MainActivity : BaseActivity() , MainContract.View {
         binding.apply {
             lifecycleOwner = this@MainActivity
             adapter = StoryAdapter {
-                val intent = Intent(this@MainActivity,DetailActivity::class.java).apply {
+                startActivity(Intent(this@MainActivity,DetailActivity::class.java).apply {
                     putExtra("imgUri",it)
-                }
-                startActivity(intent)
+                })
                 overridePendingTransition(R.anim.fadein,R.anim.fadeout)
             }.apply {
                 CoroutineScope(Dispatchers.IO).launch{
