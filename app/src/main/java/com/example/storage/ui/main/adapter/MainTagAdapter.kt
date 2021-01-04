@@ -12,7 +12,7 @@ import com.example.storage.databinding.ItemMainTagBinding
 import com.example.storage.model.ImageData
 import com.example.storage.model.TagData
 
-class MainTagAdapter(val update:(tagData : TagData) -> Unit) : RecyclerView.Adapter<MainTagAdapter.ViewHolder>() {
+class MainTagAdapter(val update:(tagData : TagData) -> Unit, val searchTag : (tag : String) -> Unit) : RecyclerView.Adapter<MainTagAdapter.ViewHolder>() {
     var imageList = mutableListOf<ImageData>()
     var tagList = mutableListOf<TagData>()
     inner class ViewHolder(private val binding: ItemMainTagBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
@@ -23,6 +23,9 @@ class MainTagAdapter(val update:(tagData : TagData) -> Unit) : RecyclerView.Adap
                 imageUri = uri
                 tag = tagItem.tag
                 isCheck = tagItem.favorites
+                root.setOnClickListener {
+                    searchTag(tagItem.tag)
+                }
             }
         }
     }

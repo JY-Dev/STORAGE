@@ -12,6 +12,7 @@ import com.example.storage.ui.main.adapter.MainItemDecoration
 import com.example.storage.ui.main.adapter.MainTagAdapter
 import com.example.storage.ui.main.adapter.StoryAdapter
 import com.example.storage.ui.main.adapter.StoryItemDecoration
+import com.example.storage.ui.search.SearchActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,23 +33,29 @@ class MainActivity : BaseActivity() , MainContract.View {
             lifecycleOwner = this@MainActivity
             storyItemDecoration = StoryItemDecoration()
             mainItemDecoration = MainItemDecoration()
-            storyAdapter = StoryAdapter {
+            storyAdapter = StoryAdapter (
+                gotoImageDetail = {
                 startActivity(Intent(this@MainActivity, DetailActivity::class.java).apply {
                     putExtra("imgUri", it)
                 })
                 overridePendingTransition(R.anim.fadein, R.anim.fadeout)
-            }.apply {
+            }).apply {
                 CoroutineScope(Dispatchers.IO).launch{
                     presenter.getImageData()
                 }
                 mStoryAdapter = this
             }
-            tagAdapter = MainTagAdapter { tagData ->
+            tagAdapter = MainTagAdapter(
+                update =  { tagData ->
                 CoroutineScope(Dispatchers.IO).launch {
                     presenter.tagUpdate(tagData)
                     presenter.getTagData()
                 }
-            }.apply {
+            }, searchTag = { tag ->
+                startActivity(Intent(this@MainActivity,SearchActivity::class.java).apply {
+                    putExtra("tag",tag)
+                })
+            }).apply {
                 CoroutineScope(Dispatchers.IO).launch {
                     presenter.getTagData()
                 }
