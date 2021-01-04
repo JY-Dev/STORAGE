@@ -1,5 +1,6 @@
 package com.example.storage.ui.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,8 @@ import com.example.storage.R
 import com.example.storage.base.BaseActivity
 import com.example.storage.databinding.ActivitySearchBinding
 import com.example.storage.model.ImageData
+import com.example.storage.ui.detail.DetailActivity
+import com.example.storage.ui.detailsearch.DetailSearchActivity
 import com.example.storage.ui.search.adapter.FilterItemDecoration
 import com.example.storage.ui.search.adapter.SearchFilterAdapter
 import com.example.storage.ui.search.adapter.SearchImageAdapter
@@ -110,7 +113,10 @@ class SearchActivity : BaseActivity(), SearchContract.View {
                     }
                     findViewById<RecyclerView>(R.id.image_list).apply {
                         adapter = SearchImageAdapter(list) {image ->
-                            image.showShortToast()
+                            startActivity(Intent(this@SearchActivity, DetailSearchActivity::class.java).apply {
+                                putExtra("imgUri", image)
+                            })
+                            pageAnimation()
                         }
                         addItemDecoration(SearchImageItemDecoration())
                         id = View.generateViewId()
