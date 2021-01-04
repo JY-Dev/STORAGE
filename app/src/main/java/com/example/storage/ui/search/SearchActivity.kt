@@ -1,17 +1,26 @@
 package com.example.storage.ui.search
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.RecyclerView
 import com.example.storage.R
 import com.example.storage.base.BaseActivity
 import com.example.storage.databinding.ActivitySearchBinding
 import com.example.storage.model.ImageData
 import com.example.storage.ui.search.adapter.FilterItemDecoration
 import com.example.storage.ui.search.adapter.SearchFilterAdapter
+import com.example.storage.ui.search.adapter.SearchImageAdapter
+import com.example.storage.ui.search.adapter.SearchImageItemDecoration
 import com.example.storage.util.getImageDateFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.collections.LinkedHashMap
@@ -21,11 +30,11 @@ class SearchActivity : BaseActivity(), SearchContract.View {
     lateinit var searchPresenter: SearchPresenter
     val filters = mutableListOf<String>()
     val searchText = MutableLiveData<String>()
+    lateinit var mGroupView : LinearLayout
     lateinit var searchFilterAdapter: SearchFilterAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         searchPresenter = SearchPresenter(this)
-        getImage()
         bind.apply {
             lifecycleOwner = this@SearchActivity
             searchAdapter = SearchFilterAdapter(delete = { tag ->
@@ -36,13 +45,17 @@ class SearchActivity : BaseActivity(), SearchContract.View {
             filterItemDecoration = FilterItemDecoration()
             searchTv = searchText
             activity = this@SearchActivity
+            mGroupView = groupView
+
             getFilterForIntent()
         }
     }
 
     private fun getFilterForIntent() {
-        intent.getStringExtra("tag")?.run {
-            setFilter(this, Filter.ADD)
+        val tag = intent.getStringExtra("tag") ?: ""
+        tag.run {
+            if(this=="") getImage()
+            else setFilter(this,Filter.ADD)
         }
     }
 
@@ -70,6 +83,7 @@ class SearchActivity : BaseActivity(), SearchContract.View {
             searchFilterAdapter.apply {
                 tagList = filters
                 notifyDataSetChanged()
+                getImage()
             }
         }
     }
@@ -86,8 +100,25 @@ class SearchActivity : BaseActivity(), SearchContract.View {
     }
 
     override suspend fun refreshImage(images: MutableList<ImageData>) {
-        sortedImageFromDate(images).forEach {
+        withContext(Dispatchers.Main){
+            mGroupView.removeAllViews()
+            sortedImageFromDate(images.filter { test -> filters.all { data -> test.tags.contains(data) } }.toMutableList()).forEach { (date, list) ->
+                LayoutInflater.from(this@SearchActivity).inflate(R.layout.item_image,null,false).apply {
+                    findViewById<TextView>(R.id.date_tv).apply {
+                        text = date
+                        id = View.generateViewId()
+                    }
+                    findViewById<RecyclerView>(R.id.image_list).apply {
+                        adapter = SearchImageAdapter(list) {image ->
+                            image.showShortToast()
+                        }
+                        addItemDecoration(SearchImageItemDecoration())
+                        id = View.generateViewId()
+                    }
+                    mGroupView.addView(this)
+                }
 
+            }
         }
     }
 
