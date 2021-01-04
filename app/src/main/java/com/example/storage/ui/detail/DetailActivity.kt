@@ -2,6 +2,7 @@ package com.example.storage.ui.detail
 
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.MutableLiveData
 import com.example.storage.R
 import com.example.storage.base.BaseActivity
 import com.example.storage.databinding.ActivityDetailBinding

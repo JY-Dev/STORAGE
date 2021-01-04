@@ -2,8 +2,17 @@
 <layout>
     <data>
         <variable
-            name="adapter"
-            type="com.example.storage.ui.main.StoryAdapter" />
+            name="storyAdapter"
+            type="com.example.storage.ui.main.adapter.StoryAdapter" />
+        <variable
+            name="tagAdapter"
+            type="com.example.storage.ui.main.adapter.MainTagAdapter" />
+        <variable
+            name="storyItemDecoration"
+            type="com.example.storage.ui.main.adapter.StoryItemDecoration" />
+        <variable
+            name="mainItemDecoration"
+            type="com.example.storage.ui.main.adapter.MainItemDecoration" />
     </data>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:bind="http://schemas.android.com/tools"
@@ -40,7 +49,8 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
-        bind:adapter="@{adapter}"
+        bind:adapter="@{storyAdapter}"
+        bind:itemDecoration="@{storyItemDecoration}"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@+id/search_btn"
@@ -49,11 +59,16 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/image_list"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="17dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
+        bind:adapter="@{tagAdapter}"
+        bind:itemDecoration="@{mainItemDecoration}"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:orientation="vertical"
+        app:spanCount="2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/story_list"

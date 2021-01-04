@@ -86,7 +86,7 @@ class SplashActivity : BaseActivity() , SplashContract.View {
                 }
             }
         }
-        startActivity<MainActivity>(this)
+        startActivity<MainActivity>(this,1500L)
     }
 
     override fun onDestroy() {
