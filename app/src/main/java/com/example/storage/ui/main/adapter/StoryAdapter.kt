@@ -28,7 +28,6 @@ class StoryAdapter(val gotoImageDetail:(imageUri : String) -> Unit) : RecyclerVi
     override fun getItemCount(): Int = storyList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        println("holder="+position)
         holder.bind(storyList[position])
     }
 }

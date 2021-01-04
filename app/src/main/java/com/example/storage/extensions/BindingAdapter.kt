@@ -32,6 +32,17 @@ fun setAdapter(view: RecyclerView, baseAdapter: RecyclerView.Adapter<*>) {
     view.adapter = baseAdapter
 }
 
+@BindingAdapter("bind:dataObserverAdapter")
+fun setDataObserverAdapter(view: RecyclerView, adapter: RecyclerView.Adapter<*>){
+    view.adapter = adapter.apply {
+        registerAdapterDataObserver(object: RecyclerView.AdapterDataObserver() {
+            override fun onChanged() {
+                view.smoothScrollToPosition(adapter.itemCount)
+            }
+        })
+    }
+}
+
 @BindingAdapter("bind:itemDecoration")
 fun setItemDecoration(view : RecyclerView, itemDecoration: RecyclerView.ItemDecoration){
     view.addItemDecoration(itemDecoration)

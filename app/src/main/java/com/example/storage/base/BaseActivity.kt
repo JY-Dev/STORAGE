@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import com.example.storage.R
 
 abstract class BaseActivity : AppCompatActivity() {
     /**
@@ -27,7 +29,7 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     protected inline fun <reified T : BaseActivity> startActivity(activity : Activity){
         startActivity(Intent(activity,T::class.java))
-        finish()
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout)
     }
 
     protected inline fun <reified T : BaseActivity> startActivity(activity : Activity, delay : Long){
@@ -35,5 +37,14 @@ abstract class BaseActivity : AppCompatActivity() {
             startActivity(Intent(activity,T::class.java))
             finish()
         },delay)
+    }
+
+    fun pageAnimation(){
+        overridePendingTransition(R.anim.fadein, R.anim.fadeout)
+    }
+
+    fun Activity.hideKeyBoard(){
+        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(currentFocus?.windowToken,0)
     }
 }

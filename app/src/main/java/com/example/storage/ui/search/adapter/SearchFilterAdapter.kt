@@ -13,12 +13,13 @@ import com.example.storage.databinding.ItemSearchFilterBinding
 import com.example.storage.model.ImageData
 import com.example.storage.model.TagData
 
-class SearchFilterAdapter(val deleteFilter:(tagData : TagData) -> Unit) : RecyclerView.Adapter<SearchFilterAdapter.ViewHolder>() {
+class SearchFilterAdapter(val delete:(deleteTag : String) -> Unit) : RecyclerView.Adapter<SearchFilterAdapter.ViewHolder>() {
     var tagList = mutableListOf<String>()
     inner class ViewHolder(private val binding: ItemSearchFilterBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
         fun bind(tag : String){
             binding.apply {
-
+                tagSt = tag
+                adapter = this@SearchFilterAdapter
             }
         }
     }
@@ -26,11 +27,16 @@ class SearchFilterAdapter(val deleteFilter:(tagData : TagData) -> Unit) : Recycl
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_search_filter, parent, false),parent.context)
 
-    override fun getItemCount(): Int = tagList.size
+    override fun getItemCount(): Int =
+        tagList.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
         holder.bind(tagList[position])
-    }
+
+
+    fun deleteTag(tag: String) =
+        delete(tag)
+
 
 
 }

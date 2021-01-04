@@ -9,10 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.storage.util.dp
 
 
-class MainItemDecoration() : RecyclerView.ItemDecoration() {
+class MainItemDecoration : RecyclerView.ItemDecoration() {
 
     override fun getItemOffsets(outRect: Rect, itemPosition: Int, parent: RecyclerView) {
-        if(itemPosition>=0)
             outRect.set(6.dp,0,6.dp,12.dp)
     }
 }

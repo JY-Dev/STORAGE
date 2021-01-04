@@ -10,7 +10,7 @@ interface ImageDao {
     /**
      * Get All TodoData
      */
-    @Query("SELECT * FROM ImageData")
+    @Query("SELECT * FROM ImageData ORDER BY date DESC")
     suspend fun getAllData() : MutableList<ImageData>
 
     /**

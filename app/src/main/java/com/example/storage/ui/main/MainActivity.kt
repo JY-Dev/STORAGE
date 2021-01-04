@@ -13,10 +13,12 @@ import com.example.storage.ui.main.adapter.MainTagAdapter
 import com.example.storage.ui.main.adapter.StoryAdapter
 import com.example.storage.ui.main.adapter.StoryItemDecoration
 import com.example.storage.ui.search.SearchActivity
+import com.example.storage.util.getImageDateFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class MainActivity : BaseActivity() , MainContract.View {
     val binding by binding<ActivityMainBinding>(R.layout.activity_main)
@@ -28,9 +30,9 @@ class MainActivity : BaseActivity() , MainContract.View {
         super.onCreate(savedInstanceState)
 
         presenter = MainPresenter(this)
-
         binding.apply {
             lifecycleOwner = this@MainActivity
+            activity = this@MainActivity
             storyItemDecoration = StoryItemDecoration()
             mainItemDecoration = MainItemDecoration()
             storyAdapter = StoryAdapter (
@@ -38,7 +40,7 @@ class MainActivity : BaseActivity() , MainContract.View {
                 startActivity(Intent(this@MainActivity, DetailActivity::class.java).apply {
                     putExtra("imgUri", it)
                 })
-                overridePendingTransition(R.anim.fadein, R.anim.fadeout)
+                pageAnimation()
             }).apply {
                 CoroutineScope(Dispatchers.IO).launch{
                     presenter.getImageData()
@@ -55,6 +57,7 @@ class MainActivity : BaseActivity() , MainContract.View {
                 startActivity(Intent(this@MainActivity,SearchActivity::class.java).apply {
                     putExtra("tag",tag)
                 })
+                    pageAnimation()
             }).apply {
                 CoroutineScope(Dispatchers.IO).launch {
                     presenter.getTagData()
@@ -63,6 +66,10 @@ class MainActivity : BaseActivity() , MainContract.View {
             }
         }
 
+    }
+
+    fun gotoSeach(){
+        startActivity<SearchActivity>(this)
     }
 
     override suspend fun setImage(images: MutableList<ImageData>) {
@@ -75,7 +82,10 @@ class MainActivity : BaseActivity() , MainContract.View {
 
     override suspend fun setStory(images: MutableList<ImageData>) {
             withContext(Dispatchers.Main){
-                mStoryAdapter.storyList = images
+                mStoryAdapter.apply {
+                    storyList = images
+                    notifyDataSetChanged()
+                }
             }
     }
 
