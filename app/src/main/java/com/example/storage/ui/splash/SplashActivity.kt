@@ -44,7 +44,7 @@ class SplashActivity : BaseActivity() , SplashContract.View {
         TedPermission.with(this)
             .setPermissionListener(permissionListener)
             .setDeniedMessage("If you reject permission,you can not use this service\\n\\nPlease turn on permissions at [Setting] > [Permission]")
-            .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            .setPermissions(android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
             .check()
     }
     /**
@@ -89,13 +89,14 @@ class SplashActivity : BaseActivity() , SplashContract.View {
                 }
             }
             startActivity<MainActivity>(this@SplashActivity)
+            finish()
         }
 
     }
 
     fun getRealPathFromURI(context: Context, contentUri: Uri): String {
         val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = context.getContentResolver().query(
+        val cursor = context.contentResolver.query(
             contentUri, proj, null, null,
             null
         )

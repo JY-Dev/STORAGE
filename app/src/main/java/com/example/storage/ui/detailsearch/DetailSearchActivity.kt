@@ -6,6 +6,8 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.example.storage.R
 import com.example.storage.base.BaseActivity
 import com.example.storage.databinding.ActivityDetailSearchBinding
@@ -32,12 +34,20 @@ class DetailSearchActivity : BaseActivity() , DetailSearchContract.View {
             mCheckBox = storyCheckbox
             activity = this@DetailSearchActivity
             root.setOnClickListener {
-                blerView.visibility = if(!toggle) View.VISIBLE else View.GONE
+                //blerView.visibility = if(!toggle) View.VISIBLE else View.GONE
                 backBtn.visibility = if(!toggle) View.VISIBLE else View.GONE
                 moreBtn.visibility = if(!toggle) View.VISIBLE else View.GONE
                 storyCheckbox.visibility = if(!toggle) View.VISIBLE else View.GONE
+                titleTv.visibility = if(!toggle) View.VISIBLE else View.GONE
                 flowView.visibility = if(!toggle) View.VISIBLE else View.GONE
-                toggleUI()
+                if(!toggle) YoYo.with(Techniques.FadeIn)
+                    .duration(500)
+                    .playOn(blerView)
+                else YoYo.with(Techniques.FadeOut)
+                    .duration(500)
+                    .playOn(blerView)
+                toggle = !toggle
+
             }
         }
     }
