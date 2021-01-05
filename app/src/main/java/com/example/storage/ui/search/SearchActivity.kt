@@ -96,6 +96,11 @@ class SearchActivity : BaseActivity(), SearchContract.View {
         object REMOVE : Filter()
     }
 
+    override fun onResume() {
+        super.onResume()
+        getImage()
+    }
+
     private fun getImage(){
         CoroutineScope(Dispatchers.IO).launch {
             searchPresenter.getImageData()
@@ -114,7 +119,7 @@ class SearchActivity : BaseActivity(), SearchContract.View {
                     findViewById<RecyclerView>(R.id.image_list).apply {
                         adapter = SearchImageAdapter(list) {image ->
                             startActivity(Intent(this@SearchActivity, DetailSearchActivity::class.java).apply {
-                                putExtra("imgUri", image)
+                                putExtra("image",image)
                             })
                             pageAnimation()
                         }

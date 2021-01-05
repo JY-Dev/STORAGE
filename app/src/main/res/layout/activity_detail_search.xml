@@ -2,8 +2,8 @@
 <layout>
     <data>
         <variable
-            name="imageUrl"
-            type="String" />
+            name="imageData"
+            type="com.example.storage.model.ImageData" />
         <variable
             name="activity"
             type="com.example.storage.ui.detailsearch.DetailSearchActivity" />
@@ -21,7 +21,7 @@
         <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            bind:setImage="@{imageUrl}"
+            bind:setImage="@{imageData.imageUri}"
             android:scaleType="centerCrop"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -78,6 +78,8 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginEnd="20dp"
+            android:checked="@{imageData.story}"
+            android:onClick="@{(view) -> activity.storyUpdate(view , imageData)}"
             android:button="@null"
             android:background="@drawable/star_checkbox"
             app:layout_constraintTop_toTopOf="@id/back_btn"

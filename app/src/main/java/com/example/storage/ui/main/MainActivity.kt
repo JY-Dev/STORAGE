@@ -65,10 +65,21 @@ class MainActivity : BaseActivity() , MainContract.View {
                 mTagAdapter = this
             }
         }
-
     }
 
-    fun gotoSeach(){
+    override fun onResume() {
+        super.onResume()
+        refreshOnResume()
+    }
+
+    private fun refreshOnResume() {
+        CoroutineScope(Dispatchers.IO).launch{
+            presenter.getImageData()
+            presenter.getTagData()
+        }
+    }
+
+    fun gotoSearch(){
         startActivity<SearchActivity>(this)
     }
 

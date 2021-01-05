@@ -14,13 +14,13 @@ import com.example.storage.databinding.ItemSearchImageBinding
 import com.example.storage.model.ImageData
 import com.example.storage.model.TagData
 
-class SearchImageAdapter(val images : MutableList<ImageData>,val detail:(image : String) -> Unit) : RecyclerView.Adapter<SearchImageAdapter.ViewHolder>() {
+class SearchImageAdapter(val images : MutableList<ImageData>,val detail:(image : ImageData) -> Unit) : RecyclerView.Adapter<SearchImageAdapter.ViewHolder>() {
     inner class ViewHolder(private val binding: ItemSearchImageBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
         fun bind(imageData : ImageData){
             binding.apply {
                 imageUri = imageData.imageUri
                 root.setOnClickListener {
-                    detail(imageData.imageUri)
+                    detail(imageData)
                 }
             }
         }

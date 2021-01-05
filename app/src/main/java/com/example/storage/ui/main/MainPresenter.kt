@@ -7,7 +7,7 @@ class MainPresenter(val mView : MainContract.View) : MainContract.Presenter, Bas
     override suspend fun getImageData(){
         val imageData = imageRepository.getData()
         mView.setImage(imageData)
-        mView.setStory(imageData)
+        mView.setStory(imageData.filter { it.story }.toMutableList())
     }
 
     override suspend fun tagUpdate(tagData: TagData) {
