@@ -1,11 +1,15 @@
 package com.example.storage.ui.splash
 
-import android.util.Log
 import com.example.storage.base.BasePresenter
 import com.example.storage.model.ImageData
 import com.example.storage.model.TagData
-import kotlinx.coroutines.*
-import kotlin.random.Random
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 
 class SplashPresenter(val mView: SplashContract.View) : SplashContract.Presenter, BasePresenter() {
     val tagMock = mutableListOf(
@@ -16,13 +20,11 @@ class SplashPresenter(val mView: SplashContract.View) : SplashContract.Presenter
         mutableListOf("me", "test", "seoul")
     )
 
-    override suspend fun dataCheck(imageUri: String, date: Long) {
-        withContext(Dispatchers.IO) {
-            if(imageRepository.getDataFromKey(imageUri)==null){
-                getTags().apply {
-                    updateTagCount(this)
-                    insertImage(imageUri,date,this)
-                }
+    override suspend fun dataCheck(imageUri: String, date: Long , file: File) {
+        if(imageRepository.getDataFromKey(imageUri)==null){
+            getTags(file).apply {
+                updateTagCount(this)
+                insertImage(imageUri,date,this)
             }
         }
     }
@@ -30,7 +32,12 @@ class SplashPresenter(val mView: SplashContract.View) : SplashContract.Presenter
     /**
      * 통신으로 받아오기
      */
-    private suspend fun getTags() : MutableList<String> = tagMock[Random.nextInt(tagMock.size)]
+    private suspend fun getTags(file: File) : MutableList<String> {
+        val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(),file)
+        val body = MultipartBody.Part.createFormData("img",file.name,requestFile)
+        return dataSource.getTags(body).tags
+    }
+
 
     private suspend fun updateTagCount(tags: MutableList<String>) {
         tags.forEach { tag ->

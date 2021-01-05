@@ -88,6 +88,22 @@
 
 
 
+        <com.nex3z.flowlayout.FlowLayout
+            android:id="@+id/flow_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:flChildSpacingForLastRow="align"
+            android:padding="10dp"
+            app:flChildSpacing="10dp"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:flRowSpacing="8dp">
+
+
+
+        </com.nex3z.flowlayout.FlowLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

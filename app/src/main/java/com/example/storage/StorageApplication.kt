@@ -1,6 +1,7 @@
 package com.example.storage
 
 import android.app.Application
+import com.example.storage.di.networkModule
 import com.example.storage.di.roomModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -13,7 +14,7 @@ class StorageApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@StorageApplication)
-            modules(roomModule)
+            modules(listOf(roomModule, networkModule))
         }
     }
 }

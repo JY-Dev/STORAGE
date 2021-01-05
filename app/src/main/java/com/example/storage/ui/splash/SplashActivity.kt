@@ -1,5 +1,7 @@
 package com.example.storage.ui.splash
 
+import android.content.Context
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -7,14 +9,14 @@ import android.util.Log
 import com.example.storage.R
 import com.example.storage.base.BaseActivity
 import com.example.storage.ui.main.MainActivity
-import com.example.storage.ui.main.MainContract
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import io.reactivex.disposables.CompositeDisposable
-import kotlinx.coroutines.*
-import java.text.SimpleDateFormat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.File
 import java.util.*
-import java.util.jar.Manifest
 
 class SplashActivity : BaseActivity() , SplashContract.View {
     lateinit var presenter: SplashPresenter
@@ -77,18 +79,33 @@ class SplashActivity : BaseActivity() , SplashContract.View {
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                         id.toString()
                     )
+                    var file = File(getRealPathFromURI(this@SplashActivity,contentUri))
                     val date = Date((cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_ADDED)) * 1000L))
-                    presenter.dataCheck(contentUri.toString(),date.time)
+                    presenter.dataCheck(contentUri.toString(),date.time,file)
                     Log.d(
                         "MainActivity",
                         "id: $id, display_name: $displayName, date_taken: ${date.time} content_uri: $contentUri ablum:$album"
                     )
                 }
             }
+            startActivity<MainActivity>(this@SplashActivity)
         }
-        startActivity<MainActivity>(this,1500L)
+
     }
 
+    fun getRealPathFromURI(context: Context, contentUri: Uri): String {
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.getContentResolver().query(
+            contentUri, proj, null, null,
+            null
+        )
+        if (cursor != null) {
+            val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            cursor.moveToFirst()
+            return cursor.getString(column_index)
+        }
+        return ""
+    }
     override fun onDestroy() {
         super.onDestroy()
         composit.dispose()

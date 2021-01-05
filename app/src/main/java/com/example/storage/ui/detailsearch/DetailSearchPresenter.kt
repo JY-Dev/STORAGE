@@ -4,8 +4,8 @@ import com.example.storage.base.BasePresenter
 import com.example.storage.model.ImageData
 
 class DetailSearchPresenter() : DetailSearchContract.Presenter , BasePresenter() {
-    override suspend fun deleteTag(imgUri : String , tag : String){
-        imageRepository.getDataFromKey(imgUri)?.run {
+    override suspend fun deleteTag(imageData : ImageData , tag : String){
+        imageData.apply {
             tags.remove(tag)
             imageRepository.update(this)
         }
