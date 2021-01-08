@@ -30,5 +30,5 @@
 # 🎮 Architecture - MVP
 
 ---
-
+<img src="STORAGE%20f3c947e0797e40d09c6014b2f28381ec/mvp.png" width="100%">/>
 ![STORAGE%20f3c947e0797e40d09c6014b2f28381ec/mvp.png](STORAGE%20f3c947e0797e40d09c6014b2f28381ec/mvp.png)
