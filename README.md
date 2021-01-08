@@ -7,8 +7,7 @@
 핸드폰에 저장된 스크린샷을 분석하여 자동적으로 태그를 달아 갤러리 처럼 활용할 수 있는 어플리케이션 입니다.
 
 # Feature
-<img src="https://user-images.githubusercontent.com/45057493/103974268-dab21880-51b4-11eb-8c6f-35c423b7fd2d.gif" width="30%">/>
-<img src="https://user-images.githubusercontent.com/45057493/103974271-dc7bdc00-51b4-11eb-8608-3ce65d9c19be.gif" width="30%">/>
+<img src="https://user-images.githubusercontent.com/45057493/103974271-dc7bdc00-51b4-11eb-8608-3ce65d9c19be.gif" width="50%">/>
 
 # ♣️ Stack & Libraries
 
