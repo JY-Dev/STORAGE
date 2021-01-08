@@ -2,7 +2,6 @@
 
 <p align="center">
 <img alt="api" src="https://img.shields.io/badge/API-29%2B-green?logo=android"/>
-<img alt="build" src="https://img.shields.io/github/workflow/status/hongbeomi/HarryPotter/Android%20CI/master"/>
 </p>
 
 
