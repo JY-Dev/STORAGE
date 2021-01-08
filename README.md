@@ -16,9 +16,9 @@ Feature
 - Kotlin based + Coroutines for asynchronous.
 - JetPack
     - LiveData -observable data holder class.
+    - Data Binding
 - [Koin](https://github.com/InsertKoinIO/koin) - dependency injection.
 - MediaStore
-- Data Binding
 - [OkHttp3](https://github.com/square/okhttp) - implementing interceptor, logging web server.
 - [Glide](https://github.com/bumptech/glide) - loading images.
 - [Retrofit2](https://github.com/square/retrofit) - REST APIs.
