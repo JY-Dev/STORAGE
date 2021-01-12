@@ -50,6 +50,6 @@ fun setItemDecoration(view : RecyclerView, itemDecoration: RecyclerView.ItemDeco
 }
 
 @BindingAdapter("bind:setVisibility")
-fun setVisibility(view : View, toggle: MutableLiveData<Boolean>){
-    println("test="+toggle.value)
+fun setVisibility(view : View, toggle: Boolean){
+    view.visibility = if (toggle) View.VISIBLE else View.GONE
 }

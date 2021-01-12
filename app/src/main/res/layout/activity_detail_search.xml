@@ -43,6 +43,7 @@
             android:layout_width="6dp"
             android:layout_height="25dp"
             android:layout_marginEnd="30dp"
+            bind:setVisibility="@{activity.toggle}"
             android:background="@drawable/more_white"
             app:layout_constraintTop_toTopOf="@id/back_btn"
             app:layout_constraintBottom_toBottomOf="@id/back_btn"
@@ -56,6 +57,7 @@
             android:layout_height="25dp"
             android:layout_marginTop="30dp"
             android:layout_marginStart="30dp"
+            bind:setVisibility="@{activity.toggle}"
             android:onClick="@{(view) -> activity.finish()}"
             android:background="@drawable/back_white"
             app:layout_constraintTop_toTopOf="parent"
@@ -67,6 +69,7 @@
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:text="사진보기"
+            bind:setVisibility="@{activity.toggle}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/back_btn"
@@ -79,6 +82,7 @@
             android:layout_height="25dp"
             android:layout_marginEnd="20dp"
             android:checked="@{imageData.story}"
+            bind:setVisibility="@{activity.toggle}"
             android:onClick="@{(view) -> activity.storyUpdate(view , imageData)}"
             android:button="@null"
             android:background="@drawable/star_checkbox"
@@ -92,6 +96,7 @@
             android:id="@+id/flow_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            bind:setVisibility="@{activity.toggle}"
             app:flChildSpacingForLastRow="align"
             android:padding="10dp"
             app:flChildSpacing="10dp"
@@ -99,11 +104,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:flRowSpacing="8dp">
-
-
-
-        </com.nex3z.flowlayout.FlowLayout>
+            app:flRowSpacing="8dp"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,24 +3,37 @@ package com.example.storage.ui.detail
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.example.storage.R
 import com.example.storage.base.BaseActivity
 import com.example.storage.databinding.ActivityDetailBinding
+import com.example.storage.ui.detailsearch.DetailSearchActivity
 
 
 class DetailActivity : BaseActivity() {
+    companion object{
+        const val DURATION = 300L
+    }
     val binding by binding<ActivityDetailBinding>(R.layout.activity_detail)
-    var toggle = true
+    var toggle = MutableLiveData<Boolean>().apply {
+        value = true
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.apply {
+            this@DetailActivity.run {
+                activity = this
+                lifecycleOwner = this
+                toggle.observe(this, Observer {
+                    when(it){
+                        true -> blerView.fadeInUI(DURATION)
+                        else -> blerView.fadeOutUI(DURATION)
+                    }
+                })
+            }
             imageUrl = intent.getStringExtra("imgUri")
             root.setOnClickListener {
-                blerView.visibility = if(!toggle) View.VISIBLE else View.GONE
-                image.visibility = if(!toggle) View.VISIBLE else View.GONE
-                moreBtn.visibility = if(!toggle) View.VISIBLE else View.GONE
-                imageBack.visibility = if(!toggle) View.VISIBLE else View.GONE
-                toggleUI()
+                toggle.value = !toggle.value!!
             }
         }
     }
@@ -30,11 +43,6 @@ class DetailActivity : BaseActivity() {
         overridePendingTransition(R.anim.fadein,R.anim.fadeout)
     }
 
-    private fun toggleUI(){
-        if(toggle) hideSystemUI()
-        else showSystemUI()
-        toggle = !toggle
-    }
 
 
 }

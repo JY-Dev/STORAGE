@@ -10,6 +10,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import kotlin.random.Random
 
 class SplashPresenter(val mView: SplashContract.View) : SplashContract.Presenter, BasePresenter() {
     val tagMock = mutableListOf(
@@ -22,7 +23,7 @@ class SplashPresenter(val mView: SplashContract.View) : SplashContract.Presenter
 
     override suspend fun dataCheck(imageUri: String, date: Long , file: File) {
         if(imageRepository.getDataFromKey(imageUri)==null){
-            getTags(file).apply {
+            getMockTags().apply {
                 updateTagCount(this)
                 insertImage(imageUri,date,this)
             }
@@ -37,6 +38,8 @@ class SplashPresenter(val mView: SplashContract.View) : SplashContract.Presenter
         val body = MultipartBody.Part.createFormData("img",file.name,requestFile)
         return dataSource.getTags(body).tags
     }
+
+    private fun getMockTags() : MutableList<String> = tagMock[Random.nextInt(tagMock.size)]
 
 
     private suspend fun updateTagCount(tags: MutableList<String>) {

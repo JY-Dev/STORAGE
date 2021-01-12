@@ -6,6 +6,8 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.storage.R
@@ -19,8 +21,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DetailSearchActivity : BaseActivity() , DetailSearchContract.View {
+    companion object{
+        const val DURATION = 300L
+    }
     val bind by binding<ActivityDetailSearchBinding>(R.layout.activity_detail_search)
-    var toggle = true
+    var toggle = MutableLiveData<Boolean>().apply {
+        value = true
+    }
     lateinit var mCheckBox: CheckBox
     lateinit var presenter: DetailSearchPresenter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,31 +38,21 @@ class DetailSearchActivity : BaseActivity() , DetailSearchContract.View {
                 imageData = this
                 setTag(flowView,this)
             }
+            this@DetailSearchActivity.run {
+                activity = this
+                lifecycleOwner = this
+                toggle.observe(this, Observer {
+                    when(it){
+                        true -> blerView.fadeInUI(DURATION)
+                        else -> blerView.fadeOutUI(DURATION)
+                    }
+                })
+            }
             mCheckBox = storyCheckbox
-            activity = this@DetailSearchActivity
             root.setOnClickListener {
-                //blerView.visibility = if(!toggle) View.VISIBLE else View.GONE
-                backBtn.visibility = if(!toggle) View.VISIBLE else View.GONE
-                moreBtn.visibility = if(!toggle) View.VISIBLE else View.GONE
-                storyCheckbox.visibility = if(!toggle) View.VISIBLE else View.GONE
-                titleTv.visibility = if(!toggle) View.VISIBLE else View.GONE
-                flowView.visibility = if(!toggle) View.VISIBLE else View.GONE
-                if(!toggle) YoYo.with(Techniques.FadeIn)
-                    .duration(500)
-                    .playOn(blerView)
-                else YoYo.with(Techniques.FadeOut)
-                    .duration(500)
-                    .playOn(blerView)
-                toggle = !toggle
-
+                toggle.value = !toggle.value!!
             }
         }
-    }
-
-    private fun toggleUI(){
-        if(toggle) hideSystemUI()
-        else showSystemUI()
-        toggle = !toggle
     }
 
     private fun setTag(view: FlowLayout,imageData : ImageData){

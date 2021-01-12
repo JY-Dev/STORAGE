@@ -88,8 +88,7 @@ class SplashActivity : BaseActivity() , SplashContract.View {
                     )
                 }
             }
-            startActivity<MainActivity>(this@SplashActivity)
-            finish()
+            startActivity<MainActivity>(this@SplashActivity,1000L)
         }
 
     }
