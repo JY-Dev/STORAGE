@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.daimajia.androidanimations.library.Techniques
@@ -25,10 +26,7 @@ class DetailSearchActivity : BaseActivity() , DetailSearchContract.View {
         const val DURATION = 300L
     }
     val bind by binding<ActivityDetailSearchBinding>(R.layout.activity_detail_search)
-    var toggle = MutableLiveData<Boolean>().apply {
-        value = true
-    }
-    lateinit var mCheckBox: CheckBox
+
     lateinit var presenter: DetailSearchPresenter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,54 +39,57 @@ class DetailSearchActivity : BaseActivity() , DetailSearchContract.View {
             this@DetailSearchActivity.run {
                 activity = this
                 lifecycleOwner = this
-                toggle.observe(this, Observer {
-                    when(it){
-                        true -> blerView.fadeInUI(DURATION)
-                        else -> blerView.fadeOutUI(DURATION)
-                    }
-                })
+                blerView.setToggle(this)
             }
-            mCheckBox = storyCheckbox
             root.setOnClickListener {
-                toggle.value = !toggle.value!!
+                setToggle()
             }
         }
+    }
+
+    private fun View.setToggle(lifecycleOwner: LifecycleOwner){
+        toggle.observe(lifecycleOwner, Observer {
+            when(it){
+                true -> fadeInUI(DURATION)
+                else -> fadeOutUI(DURATION)
+            }
+        })
+    }
+
+    private fun setToggle(){
+        toggle.value = !toggle.value!!
     }
 
     private fun setTag(view: FlowLayout,imageData : ImageData){
         imageData.tags.forEach {
             val tag = it
-            LayoutInflater.from(this).inflate(R.layout.item_detail_tag,null).apply {
-                val inner = this
-                findViewById<TextView>(R.id.tag_tv).apply {
-                    text = it
-                    id = View.generateViewId()
+            LayoutInflater.from(this).inflate(R.layout.item_detail_tag,null,false).apply {
+                val itemView = this
+                findViewById<TextView>(R.id.tag_tv).setTagTv(tag)
+                findViewById<ImageButton>(R.id.close_btn).setDeleteListener {
+                    view.removeView(itemView)
+                    presenter.deleteTag(imageData,tag)
                 }
-                findViewById<ImageButton>(R.id.close_btn).apply {
-                    setOnClickListener {
-                        view.removeView(inner)
-                        CoroutineScope(Dispatchers.IO).launch {
-                            presenter.deleteTag(imageData,tag)
-                        }
-                    }
-                    id = View.generateViewId()
-                }
-                view.addView(this)
+                view.addView(itemView)
             }
         }
+    }
 
+    private fun TextView.setTagTv(tag : String) {
+        text = tag
+        id = View.generateViewId()
+    }
+
+    private fun View.setDeleteListener(delete : () -> Unit){
+        setOnClickListener {
+            delete()
+        }
+        id = View.generateViewId()
     }
 
     fun storyUpdate(view: View , imageData: ImageData){
         val checkBox = view as CheckBox
-        CoroutineScope(Dispatchers.IO).launch {
-            presenter.storyUpdate(imageData,checkBox.isChecked)
-        }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        pageAnimation()
+        presenter.storyUpdate(imageData,checkBox.isChecked)
     }
 
 }

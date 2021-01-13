@@ -7,7 +7,7 @@ interface DetailSearchContract {
     }
 
     interface Presenter{
-        suspend fun deleteTag(imgData : ImageData, tag : String)
-        suspend fun storyUpdate(imageData : ImageData , isStory : Boolean)
+        fun deleteTag(imgData : ImageData, tag : String)
+        fun storyUpdate(imageData : ImageData , isStory : Boolean)
     }
 }

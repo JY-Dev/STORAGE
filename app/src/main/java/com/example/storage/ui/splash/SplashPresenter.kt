@@ -45,9 +45,8 @@ class SplashPresenter(val mView: SplashContract.View) : SplashContract.Presenter
     private suspend fun updateTagCount(tags: MutableList<String>) {
         tags.forEach { tag ->
             if (tagRepository.getDataFromKey(tag) == null) insertTag(tag)
-            tagRepository.getDataFromKey(tag)?.run {
+            else tagRepository.getDataFromKey(tag)?.run {
                 count += 1
-                println("tag=$tag count=$count")
                 updateTag(this)
             }
         }

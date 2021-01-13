@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
 
-class MainActivity : BaseActivity() , MainContract.View {
+class MainActivity : BaseActivity(), MainContract.View {
     val binding by binding<ActivityMainBinding>(R.layout.activity_main)
     lateinit var presenter: MainPresenter
     lateinit var mStoryAdapter: StoryAdapter
@@ -35,33 +35,19 @@ class MainActivity : BaseActivity() , MainContract.View {
             activity = this@MainActivity
             storyItemDecoration = StoryItemDecoration()
             mainItemDecoration = MainItemDecoration()
-            storyAdapter = StoryAdapter (
+            storyAdapter = StoryAdapter(
                 gotoImageDetail = {
-                startActivity(Intent(this@MainActivity, DetailActivity::class.java).apply {
-                    putExtra("imgUri", it)
-                })
-                pageAnimation()
-            }).apply {
-                CoroutineScope(Dispatchers.IO).launch{
-                    presenter.getImageData()
-                }
+                    startActivity<DetailActivity>(this@MainActivity,"imgUri",it)
+                }).apply {
+                presenter.getImageData()
                 mStoryAdapter = this
             }
             tagAdapter = MainTagAdapter(
-                update =  { tagData ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    presenter.tagUpdate(tagData)
-                    presenter.getTagData()
-                }
-            }, searchTag = { tag ->
-                startActivity(Intent(this@MainActivity,SearchActivity::class.java).apply {
-                    putExtra("tag",tag)
-                })
-                    pageAnimation()
-            }).apply {
-                CoroutineScope(Dispatchers.IO).launch {
-                    presenter.getTagData()
-                }
+                update = { tagData -> presenter.tagUpdate(tagData)
+                refreshOnResume()},
+                searchTag = { tag ->
+                    startActivity<SearchActivity>(this@MainActivity,"tag",tag)
+                }).apply {
                 mTagAdapter = this
             }
         }
@@ -73,43 +59,34 @@ class MainActivity : BaseActivity() , MainContract.View {
     }
 
     private fun refreshOnResume() {
-        CoroutineScope(Dispatchers.IO).launch{
-            presenter.getImageData()
-            presenter.getTagData()
-        }
+        presenter.getImageData()
     }
 
-    fun gotoSearch(){
+    fun gotoSearch() {
         startActivity<SearchActivity>(this)
     }
 
-    override suspend fun setImage(images: MutableList<ImageData>) {
-        withContext(Dispatchers.Main){
-            mTagAdapter.apply {
-                imageList = images
-            }
+    override fun setImage(images: MutableList<ImageData>) {
+        mTagAdapter.apply {
+            imageList = images
         }
     }
 
-    override suspend fun setStory(images: MutableList<ImageData>) {
-            withContext(Dispatchers.Main){
-                mStoryAdapter.apply {
-                    storyList = images
-                    notifyDataSetChanged()
-                }
-            }
-    }
-
-    override suspend fun setTag(tags: MutableList<TagData>) {
-        withContext(Dispatchers.Main){
-            mTagAdapter.apply {
-                tagList = sortedTag(tags)
-                notifyDataSetChanged()
-            }
+    override fun setStory(images: MutableList<ImageData>) {
+        mStoryAdapter.apply {
+            storyList = images
+            notifyDataSetChanged()
         }
     }
 
-    private fun sortedTag(tags: MutableList<TagData>) : MutableList<TagData>{
+    override fun setTag(tags: MutableList<TagData>) {
+        mTagAdapter.apply {
+            tagList = sortedTag(tags)
+            notifyDataSetChanged()
+        }
+    }
+
+    private fun sortedTag(tags: MutableList<TagData>): MutableList<TagData> {
         return mutableListOf<TagData>().apply {
             addAll(tags.filter { it.favorites }.sortedBy { it.count })
             addAll(tags.filter { !it.favorites }.sortedBy { it.count })

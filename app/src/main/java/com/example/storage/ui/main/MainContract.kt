@@ -5,14 +5,13 @@ import com.example.storage.model.TagData
 
 interface MainContract {
     interface View {
-        suspend fun setImage(images: MutableList<ImageData>)
-        suspend fun setStory(images: MutableList<ImageData>)
-        suspend fun setTag(tags: MutableList<TagData>)
+        fun setImage(images: MutableList<ImageData>)
+        fun setStory(images: MutableList<ImageData>)
+        fun setTag(tags: MutableList<TagData>)
     }
 
     interface Presenter {
-        suspend fun getImageData()
-        suspend fun tagUpdate(tagData: TagData)
-        suspend fun getTagData()
+        fun getImageData()
+        fun tagUpdate(tagData: TagData)
     }
 }

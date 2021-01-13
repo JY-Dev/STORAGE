@@ -15,9 +15,7 @@ class DetailActivity : BaseActivity() {
         const val DURATION = 300L
     }
     val binding by binding<ActivityDetailBinding>(R.layout.activity_detail)
-    var toggle = MutableLiveData<Boolean>().apply {
-        value = true
-    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.apply {
@@ -37,12 +35,5 @@ class DetailActivity : BaseActivity() {
             }
         }
     }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        overridePendingTransition(R.anim.fadein,R.anim.fadeout)
-    }
-
-
 
 }

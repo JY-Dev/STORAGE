@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.MutableLiveData
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.example.storage.R
@@ -32,7 +33,7 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     protected inline fun <reified T : BaseActivity> startActivity(activity : Activity){
         startActivity(Intent(activity,T::class.java))
-        overridePendingTransition(R.anim.fadein, R.anim.fadeout)
+        pageAnimation()
     }
 
     protected inline fun <reified T : BaseActivity> startActivity(activity : Activity, delay : Long){
@@ -40,6 +41,13 @@ abstract class BaseActivity : AppCompatActivity() {
             startActivity(Intent(activity,T::class.java))
             finish()
         },delay)
+    }
+
+    protected inline fun <reified T : BaseActivity> startActivity(activity : Activity, key : String , value : String){
+        startActivity(Intent(activity,T::class.java).apply {
+            putExtra(key,value)
+        })
+        pageAnimation()
     }
 
     fun View.fadeInUI(duration: Long) =
@@ -52,6 +60,10 @@ abstract class BaseActivity : AppCompatActivity() {
             .duration(duration)
             .playOn(this)
 
+    var toggle = MutableLiveData<Boolean>().apply {
+        value = true
+    }
+
     fun pageAnimation(){
         overridePendingTransition(R.anim.fadein, R.anim.fadeout)
     }
@@ -59,5 +71,10 @@ abstract class BaseActivity : AppCompatActivity() {
     fun Activity.hideKeyBoard(){
         val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(currentFocus?.windowToken,0)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        pageAnimation()
     }
 }

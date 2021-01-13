@@ -20,7 +20,6 @@ import java.util.*
 
 class SplashActivity : BaseActivity() , SplashContract.View {
     lateinit var presenter: SplashPresenter
-    val composit = CompositeDisposable()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
@@ -105,10 +104,6 @@ class SplashActivity : BaseActivity() , SplashContract.View {
             return cursor.getString(column_index)
         }
         return ""
-    }
-    override fun onDestroy() {
-        super.onDestroy()
-        composit.dispose()
     }
 
 }
