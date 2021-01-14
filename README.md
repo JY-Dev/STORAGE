@@ -8,7 +8,9 @@
 ### It is an application that analyzes screenshots stored on your phones and automatically tags them to use like galleries.
 
 # Feature
+<p align="center">
 <img src="https://user-images.githubusercontent.com/45057493/103974271-dc7bdc00-51b4-11eb-8608-3ce65d9c19be.gif" width="50%" align="center">/>
+</p>
 
 
 # ♣️ Stack & Libraries
