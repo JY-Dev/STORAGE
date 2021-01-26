@@ -3,7 +3,7 @@
 
 
 
-# ♟️Description <img alt="api" src="https://img.shields.io/badge/API-29%2B-green?logo=android"/>
+# Description <img alt="api" src="https://img.shields.io/badge/API-29%2B-green?logo=android"/>
 
 ### It is an application that analyzes screenshots stored on your phones and automatically tags them to use like galleries.
 
@@ -13,7 +13,7 @@
 </p>
 
 
-# ♣️ Stack & Libraries
+# Stack & Libraries
 
 - Minimum SDK level 29
 - Kotlin based + Coroutines for asynchronous.
@@ -26,5 +26,5 @@
 - [Glide](https://github.com/bumptech/glide) - loading images.
 - [Retrofit2](https://github.com/square/retrofit) - REST APIs.
 
-# 🎮 Architecture - MVP
+# Architecture - MVP
 ![STORAGE%20f3c947e0797e40d09c6014b2f28381ec/mvp.png](STORAGE%20f3c947e0797e40d09c6014b2f28381ec/mvp.png)
